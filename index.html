@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MobileGestalt Plist Editor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* 基础样式 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --yellow-primary: #FFD60A;
+      --black: #000000;
+      --white: #FFFFFF;
+      --off-white: #F5F5F5;
+      --light-gray: #E0E0E0;
+      --medium-gray: #999999;
+      --dark-gray: #333333;
+      --blue-primary: #4DA3FF;
+      --blue-hover: #3D93EF;
+      --teal: #4ECDC4;
+      --coral: #FF6B6B;
+      --error: #F44336;
+      --success: #4CAF50;
+      --font-heading: 'Space Mono', monospace;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 黄色横幅 */
+    .warning-banner {
+      width: 100%;
+      background: var(--yellow-primary);
+      border-top: 3px solid var(--black);
+      border-bottom: 3px solid var(--black);
+      padding: 8px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .warning-banner-text {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 14px;
+      padding-right: 100%;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* 容器 */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 16px;
+      flex: 1;
+    }
+
+    /* 标题区 */
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header h1 {
+      font-family: var(--font-heading);
+      font-size: 48px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .header p {
+      font-size: 16px;
+      color: var(--dark-gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header .info-text {
+      background: var(--off-white);
+      border: 2px solid var(--black);
+      padding: 16px;
+      margin: 16px auto 0;
+      max-width: 600px;
+      font-size: 14px;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .header .info-text strong {
+      color: var(--coral);
+      font-weight: 700;
+    }
+
+    /* 卡片 */
+    .card {
+      background: var(--white);
+      border: 3px solid var(--black);
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 6px 6px 0px var(--black);
+      transition: all 0.2s ease-out;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--yellow-primary);
+      border: 2px solid var(--black);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* 输入区域 */
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      color: var(--dark-gray);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      font-size: 16px;
+      font-family: var(--font-body);
+      transition: all 0.2s ease-out;
+      resize: vertical;
+      min-height: 300px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-width: 3px;
+      box-shadow: 4px 4px 0px var(--black);
+    }
+
+    .input-field.small {
+      min-height: auto;
+      height: 48px;
+    }
+
+    .input-field.error {
+      border-color: var(--error);
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    /* 按钮 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 32px;
+      background-color: var(--blue-primary);
+      color: var(--white);
+      border: 3px solid var(--black);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 4px 4px 0px var(--black);
+      transition: all 0.2s ease-out;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--black);
+      background-color: var(--blue-hover);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translate(0, 0);
+      box-shadow: 2px 2px 0px var(--black);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background-color: var(--white);
+      color: var(--black);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: var(--yellow-primary);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Plist 查看器 */
+    .plist-viewer {
+      background: var(--off-white);
+      border: 2px solid var(--black);
+      padding: 16px;
+      max-height: 500px;
+      overflow-y: auto;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .plist-viewer.show {
+      display: block;
+    }
+
+    .plist-tree {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .plist-tree ul {
+      list-style: none;
+      padding-left: 24px;
+    }
+
+    .plist-item {
+      margin: 4px 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .plist-key {
+      color: var(--coral);
+      font-weight: 600;
+    }
+
+    .plist-type {
+      color: var(--medium-gray);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .plist-value {
+      color: var(--dark-gray);
+      word-break: break-all;
+    }
+
+    .plist-value.highlight {
+      background: var(--yellow-primary);
+      padding: 2px 4px;
+      border: 1px solid var(--black);
+      font-weight: 700;
+    }
+
+    .plist-toggle {
+      cursor: pointer;
+      user-select: none;
+      color: var(--blue-primary);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .plist-toggle:hover {
+      color: var(--blue-hover);
+    }
+
+    .collapsed {
+      display: none;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .container {
+        padding: 24px 12px;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        line-height: 1.2;
+      }
+
+      .header p {
+        font-size: 14px;
+      }
+
+      .header .info-text {
+        font-size: 13px;
+        padding: 12px;
+        line-height: 1.6;
+      }
+
+      .card {
+        padding: 20px 12px;
+        box-shadow: 4px 4px 0px var(--black);
+        margin-bottom: 16px;
+      }
+
+      .card-header {
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+
+      .card-title {
+        font-size: 18px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 24px;
+      }
+
+      .file-input-label {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 24px;
+        box-sizing: border-box;
+      }
+
+      .file-name {
+        display: block;
+        margin-left: 0;
+        margin-top: 8px;
+        font-size: 12px;
+      }
+
+      .input-field {
+        font-size: 11px;
+        padding: 10px 12px;
+      }
+
+      .plist-viewer {
+        font-size: 11px;
+        padding: 12px;
+        max-height: 400px;
+      }
+
+      .usage-guide {
+        padding: 16px 12px;
+        box-shadow: 4px 4px 0px var(--black);
+      }
+
+      .usage-guide h3 {
+        font-size: 16px;
+      }
+
+      .usage-guide ol {
+        font-size: 13px;
+        line-height: 1.8;
+        margin-left: 16px;
+      }
+
+      .history-item {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-small {
+        width: 100%;
+      }
+
+      .warning-banner-text {
+        font-size: 12px;
+      }
+    }
+
+    /* 加载状态 */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 24px;
+      font-weight: 600;
+      color: var(--dark-gray);
+    }
+
+    .loading.show {
+      display: block;
+    }
+
+    /* 隐藏元素 */
+    .hidden {
+      display: none !important;
+    }
+
+    /* 页脚 */
+    .footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 32px 16px;
+      text-align: center;
+      border-top: 3px solid var(--black);
+      margin-top: 48px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-author {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-copyright {
+      font-size: 14px;
+      color: var(--light-gray);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .footer {
+        padding: 24px 12px;
+        margin-top: 32px;
+      }
+
+      .footer-author {
+        font-size: 16px;
+      }
+
+      .footer-copyright {
+        font-size: 12px;
+      }
+    }
+
+    /* 文件输入区域 */
+    .file-input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .file-input-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 32px;
+      background-color: var(--teal);
+      color: var(--white);
+      border: 3px solid var(--black);
+      font-family: var(--font-body);
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: 4px 4px 0px var(--black);
+      transition: all 0.2s ease-out;
+      cursor: pointer;
+    }
+
+    .file-input-label:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--black);
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .file-name {
+      display: inline-block;
+      margin-left: 16px;
+      font-size: 14px;
+      color: var(--dark-gray);
+      font-weight: 600;
+    }
+
+    /* 成功提示 */
+    .success-message {
+      background: var(--success);
+      color: var(--white);
+      padding: 16px;
+      border: 3px solid var(--black);
+      box-shadow: 4px 4px 0px var(--black);
+      margin-bottom: 24px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    /* 使用指南 */
+    .usage-guide {
+      background: var(--teal);
+      color: var(--white);
+      padding: 24px;
+      border: 3px solid var(--black);
+      box-shadow: 6px 6px 0px var(--black);
+      margin-bottom: 24px;
+      display: none;
+    }
+
+    .usage-guide.show {
+      display: block;
+    }
+
+    .usage-guide h3 {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border-bottom: 2px solid var(--white);
+      padding-bottom: 8px;
+    }
+
+    .usage-guide ol {
+      margin-left: 20px;
+      line-height: 2;
+      font-weight: 600;
+    }
+
+    .usage-guide ol li {
+      margin-bottom: 8px;
+    }
+
+    .usage-guide .file-name-highlight {
+      background: var(--yellow-primary);
+      color: var(--black);
+      padding: 2px 8px;
+      border: 2px solid var(--white);
+      font-family: var(--font-heading);
+      font-weight: 700;
+    }
+
+    /* 历史记录 */
+    .history-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 2px solid var(--light-gray);
+    }
+
+    .history-title {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      color: var(--dark-gray);
+    }
+
+    .history-item {
+      background: var(--off-white);
+      border: 2px solid var(--black);
+      padding: 12px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease-out;
+    }
+
+    .history-item:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 3px 3px 0px var(--black);
+    }
+
+    .history-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-date {
+      font-size: 12px;
+      color: var(--medium-gray);
+      font-weight: 600;
+    }
+
+    .history-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark-gray);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-small {
+      padding: 8px 16px;
+      font-size: 12px;
+      box-shadow: 2px 2px 0px var(--black);
+      white-space: nowrap;
+    }
+
+    .btn-small:hover:not(:disabled) {
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0px var(--black);
+    }
+
+    .btn-small:active:not(:disabled) {
+      transform: translate(0, 0);
+      box-shadow: 1px 1px 0px var(--black);
+    }
+
+    .no-history {
+      text-align: center;
+      color: var(--medium-gray);
+      font-size: 14px;
+      padding: 24px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <!-- 黄色横幅 -->
+  <div class="warning-banner">
+    <div class="warning-banner-text">
+      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
+    </div>
+  </div>
+
+  <!-- 主容器 -->
+  <div class="container">
+    <!-- 标题区 -->
+    <div class="header">
+      <h1>MobileGestalt<br>Plist Editor</h1>
+      <p>在线编辑和修改 MobileGestalt.plist 文件，支持自动替换关键字段</p>
+      <div class="info-text">
+        <strong>注意：</strong>您无需手动修改地区代码（如 CH、CH/A 等），程序会自动将其替换为 <strong>LL</strong> 和 <strong>LL/A</strong>。
+        <br>
+        如果不清楚 A 开头的型号应该换成什么，请前往 
+        <a href="https://support.apple.com/zh-cn/108044" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
+          Apple 官方支持
+        </a> 
+        查找您的设备对应的美版号码。
+      </div>
+    </div>
+
+    <!-- 使用指南 -->
+    <div class="usage-guide" id="usageGuide">
+      <h3>下载成功！请按以下步骤操作：</h3>
+      <ol>
+        <li>请确认下载的文件名为：<span class="file-name-highlight">com.apple.MobileGestalt.plist</span></li>
+        <li>将此文件发送到您的电脑上</li>
+        <li>打开 <strong>misaka26 App</strong></li>
+        <li>选择刚才下载的 plist 文件</li>
+        <li>勾选 <strong>"Apple Intelligence (18.1 Beta, All Devices)"</strong></li>
+        <li>点击 <strong>Apply</strong> 按钮完成</li>
+      </ol>
+      <div style="margin-top: 20px; padding: 16px; background: rgba(0,0,0,0.1); border: 2px solid rgba(255,255,255,0.3);">
+        <strong>⚠️ 注意：</strong>如果您的电脑没有下载 misaka26 App，可以前往 
+        <a href="https://github.com/straight-tamago/misaka26/releases/" 
+           target="_blank" 
+           rel="noopener noreferrer"
+           style="color: #FFD60A; text-decoration: underline; font-weight: 700;">
+          GitHub Releases
+        </a> 
+        下载最新版的软件
+      </div>
+    </div>
+
+    <!-- 输入卡片 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">步骤 1</span>
+        <h2 class="card-title">粘贴 Plist 文件</h2>
+      </div>
+
+      <div class="file-input-wrapper">
+        <label for="fileInput" class="file-input-label">
+          或者上传文件
+        </label>
+        <input type="file" id="fileInput" accept=".plist">
+        <span class="file-name" id="fileName"></span>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="plistInput">
+          粘贴 Plist XML 内容：
+        </label>
+        <textarea 
+          id="plistInput" 
+          class="input-field" 
+          placeholder="粘贴 com.apple.MobileGestalt.plist 文件内容..."
+        ></textarea>
+        <div class="error-message" id="inputError">请输入有效的 plist XML 内容</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn" id="parseBtn">
+          开始解析
+        </button>
+        <button class="btn btn-secondary" id="clearBtn">
+          清空
+        </button>
+      </div>
+    </div>
+
+    <!-- 加载状态 -->
+    <div class="loading" id="loading">
+      正在解析文件...
+    </div>
+
+    <!-- 查看器卡片 -->
+    <div class="card hidden" id="viewerCard">
+      <div class="card-header">
+        <span class="badge">步骤 2</span>
+        <h2 class="card-title">查看 Plist 内容</h2>
+      </div>
+
+      <div class="plist-viewer show" id="plistViewer">
+        <!-- 树形结构将在这里动态生成 -->
+      </div>
+    </div>
+
+    <!-- 编辑卡片 -->
+    <div class="card hidden" id="editCard">
+      <div class="card-header">
+        <span class="badge">步骤 3</span>
+        <h2 class="card-title">输入新值</h2>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="newValue">
+          97JDvERpVwO+GHtthIh7hA 的新值（如：A3258）：
+        </label>
+        <input 
+          type="text" 
+          id="newValue" 
+          class="input-field small" 
+          placeholder="A3258"
+          maxlength="10"
+        >
+        <div class="error-message" id="valueError">请输入有效的值（不允许空格和特殊字符）</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-success" id="exportBtn">
+          导出并下载
+        </button>
+      </div>
+
+      <!-- 历史记录 -->
+      <div class="history-section" id="historySection">
+        <div class="history-title">原始文件历史记录</div>
+        <div id="historyList">
+          <div class="no-history">暂无保存的文件</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-author">乐海一粟</div>
+      <div class="footer-copyright">保留所有权利 © 2025</div>
+    </div>
+  </footer>
+
+  <script>
+    // 全局变量
+    let plistDoc = null;
+    let plistData = {};
+    let originalPlistContent = '';
+    const STORAGE_KEY = 'mobilegestalt_history';
+    const MAX_HISTORY = 10;
+
+    // DOM 元素
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+    const plistInput = document.getElementById('plistInput');
+    const parseBtn = document.getElementById('parseBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const plistViewer = document.getElementById('plistViewer');
+    const viewerCard = document.getElementById('viewerCard');
+    const editCard = document.getElementById('editCard');
+    const newValue = document.getElementById('newValue');
+    const exportBtn = document.getElementById('exportBtn');
+    const inputError = document.getElementById('inputError');
+    const valueError = document.getElementById('valueError');
+    const loading = document.getElementById('loading');
+    const usageGuide = document.getElementById('usageGuide');
+    const historyList = document.getElementById('historyList');
+
+    // 初始化
+    loadHistory();
+
+    // 文件上传处理
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        fileName.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          plistInput.value = event.target.result;
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // 清空按钮
+    clearBtn.addEventListener('click', () => {
+      plistInput.value = '';
+      fileInput.value = '';
+      fileName.textContent = '';
+      viewerCard.classList.add('hidden');
+      editCard.classList.add('hidden');
+      inputError.classList.remove('show');
+      plistInput.classList.remove('error');
+      usageGuide.classList.remove('show');
+      newValue.value = '';
+      plistDoc = null;
+      plistData = {};
+      originalPlistContent = '';
+    });
+
+    // 解析按钮
+    parseBtn.addEventListener('click', () => {
+      const xmlContent = plistInput.value.trim();
+      
+      if (!xmlContent) {
+        showError(inputError, plistInput, '请输入有效的 plist XML 内容');
+        return;
+      }
+
+      loading.classList.add('show');
+      inputError.classList.remove('show');
+      plistInput.classList.remove('error');
+      usageGuide.classList.remove('show');
+
+      setTimeout(() => {
+        try {
+          // 保存原始内容
+          originalPlistContent = xmlContent;
+
+          // 解析 XML
+          const parser = new DOMParser();
+          plistDoc = parser.parseFromString(xmlContent, 'text/xml');
+
+          // 检查是否有解析错误
+          const parserError = plistDoc.querySelector('parsererror');
+          if (parserError) {
+            throw new Error('XML 解析失败');
+          }
+
+          // 查找 CacheExtra 字典
+          const cacheExtra = findCacheExtra(plistDoc);
+          if (!cacheExtra) {
+            throw new Error('未找到 CacheExtra 字典');
+          }
+
+          // 解析 plist 数据
+          plistData = parsePlistDict(cacheExtra);
+
+          // 显示查看器
+          displayPlist(plistData);
+          viewerCard.classList.remove('hidden');
+          editCard.classList.remove('hidden');
+
+          // 滚动到查看器
+          viewerCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        } catch (error) {
+          showError(inputError, plistInput, '解析失败：' + error.message);
+          viewerCard.classList.add('hidden');
+          editCard.classList.add('hidden');
+        } finally {
+          loading.classList.remove('show');
+        }
+      }, 300);
+    });
+
+    // 输入验证
+    newValue.addEventListener('input', (e) => {
+      // 移除空格和特殊字符
+      e.target.value = e.target.value.replace(/[^A-Za-z0-9]/g, '');
+      valueError.classList.remove('show');
+      newValue.classList.remove('error');
+    });
+
+    // 导出按钮
+    exportBtn.addEventListener('click', () => {
+      const value = newValue.value.trim();
+      
+      if (!value || !/^[A-Za-z0-9]+$/.test(value)) {
+        showError(valueError, newValue, '请输入有效的值（不允许空格和特殊字符）');
+        return;
+      }
+
+      if (!plistDoc) {
+        alert('请先解析 plist 文件');
+        return;
+      }
+
+      try {
+        // 修改值
+        modifyPlistValues(plistDoc, value);
+
+        // 生成 XML 字符串
+        const serializer = new XMLSerializer();
+        let xmlString = serializer.serializeToString(plistDoc);
+
+        // 添加 XML 声明（如果没有）
+        if (!xmlString.startsWith('<?xml')) {
+          xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n' + xmlString;
+        }
+
+        // 保存到历史记录
+        saveToHistory(originalPlistContent);
+
+        // 下载文件
+        downloadFile(xmlString, 'com.apple.MobileGestalt.plist');
+
+        // 显示使用指南
+        usageGuide.classList.add('show');
+        
+        // 滚动到使用指南
+        setTimeout(() => {
+          usageGuide.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+
+        // 10秒后自动隐藏
+        setTimeout(() => {
+          usageGuide.classList.remove('show');
+        }, 30000);
+
+      } catch (error) {
+        alert('导出失败：' + error.message);
+      }
+    });
+
+    // 查找 CacheExtra 字典
+    function findCacheExtra(doc) {
+      const dicts = doc.querySelectorAll('dict');
+      for (let dict of dicts) {
+        const prevKey = dict.previousElementSibling;
+        if (prevKey && prevKey.tagName === 'key' && prevKey.textContent === 'CacheExtra') {
+          return dict;
+        }
+      }
+      return null;
+    }
+
+    // 解析 plist 字典
+    function parsePlistDict(dictElement) {
+      const result = {};
+      const children = Array.from(dictElement.children);
+      
+      for (let i = 0; i < children.length; i += 2) {
+        const keyElement = children[i];
+        const valueElement = children[i + 1];
+        
+        if (keyElement && keyElement.tagName === 'key' && valueElement) {
+          const key = keyElement.textContent;
+          const value = parsePlistValue(valueElement);
+          result[key] = value;
+        }
+      }
+      
+      return result;
+    }
+
+    // 解析 plist 值
+    function parsePlistValue(element) {
+      const tag = element.tagName.toLowerCase();
+      
+      switch (tag) {
+        case 'string':
+          return { type: 'string', value: element.textContent };
+        case 'integer':
+          return { type: 'integer', value: element.textContent };
+        case 'real':
+          return { type: 'real', value: element.textContent };
+        case 'true':
+          return { type: 'boolean', value: 'true' };
+        case 'false':
+          return { type: 'boolean', value: 'false' };
+        case 'data':
+          return { type: 'data', value: element.textContent.substring(0, 50) + '...' };
+        case 'array':
+          return { type: 'array', value: parseArray(element) };
+        case 'dict':
+          return { type: 'dict', value: parsePlistDict(element) };
+        default:
+          return { type: 'unknown', value: element.textContent };
+      }
+    }
+
+    // 解析数组
+    function parseArray(arrayElement) {
+      const items = [];
+      for (let child of arrayElement.children) {
+        items.push(parsePlistValue(child));
+      }
+      return items;
+    }
+
+    // 显示 plist 内容
+    function displayPlist(data) {
+      const ul = document.createElement('ul');
+      ul.className = 'plist-tree';
+      
+      // 显示关键字段
+      const highlightKeys = [
+        '97JDvERpVwO+GHtthIh7hA',
+        'zHeENZu+wbg7PUprwNwBWg',
+        'h63QSdBCiT/z0WU6rdQv6Q'
+      ];
+
+      for (let key in data) {
+        const li = createPlistItem(key, data[key], highlightKeys.includes(key));
+        ul.appendChild(li);
+      }
+
+      plistViewer.innerHTML = '';
+      plistViewer.appendChild(ul);
+    }
+
+    // 创建 plist 项目
+    function createPlistItem(key, valueObj, highlight = false) {
+      const li = document.createElement('li');
+      li.className = 'plist-item';
+
+      const keySpan = document.createElement('span');
+      keySpan.className = 'plist-key';
+      keySpan.textContent = key;
+
+      const typeSpan = document.createElement('span');
+      typeSpan.className = 'plist-type';
+      typeSpan.textContent = `(${valueObj.type})`;
+
+      const valueSpan = document.createElement('span');
+      valueSpan.className = 'plist-value' + (highlight ? ' highlight' : '');
+
+      if (valueObj.type === 'dict' || valueObj.type === 'array') {
+        valueSpan.textContent = valueObj.type === 'dict' ? '{ ... }' : '[ ... ]';
+      } else {
+        valueSpan.textContent = valueObj.value;
+      }
+
+      li.appendChild(keySpan);
+      li.appendChild(typeSpan);
+      li.appendChild(valueSpan);
+
+      return li;
+    }
+
+    // 修改 plist 值
+    function modifyPlistValues(doc, newModelValue) {
+      const cacheExtra = findCacheExtra(doc);
+      if (!cacheExtra) {
+        throw new Error('未找到 CacheExtra 字典');
+      }
+
+      const keys = Array.from(cacheExtra.querySelectorAll('key'));
+      
+      // 修改 97JDvERpVwO+GHtthIh7hA
+      for (let keyElement of keys) {
+        if (keyElement.textContent === '97JDvERpVwO+GHtthIh7hA') {
+          const valueElement = keyElement.nextElementSibling;
+          if (valueElement && valueElement.tagName === 'string') {
+            valueElement.textContent = newModelValue;
+          }
+        }
+        // 修改 zHeENZu+wbg7PUprwNwBWg 为 LL/A
+        else if (keyElement.textContent === 'zHeENZu+wbg7PUprwNwBWg') {
+          const valueElement = keyElement.nextElementSibling;
+          if (valueElement && valueElement.tagName === 'string') {
+            valueElement.textContent = 'LL/A';
+          }
+        }
+        // 修改 h63QSdBCiT/z0WU6rdQv6Q 为 LL
+        else if (keyElement.textContent === 'h63QSdBCiT/z0WU6rdQv6Q') {
+          const valueElement = keyElement.nextElementSibling;
+          if (valueElement && valueElement.tagName === 'string') {
+            valueElement.textContent = 'LL';
+          }
+        }
+      }
+    }
+
+    // 下载文件
+    function downloadFile(content, filename) {
+      const blob = new Blob([content], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // 显示错误
+    function showError(errorElement, inputElement, message) {
+      errorElement.textContent = message;
+      errorElement.classList.add('show');
+      inputElement.classList.add('error');
+    }
+
+    // 保存到历史记录
+    function saveToHistory(content) {
+      try {
+        let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        
+        // 添加新记录
+        const record = {
+          id: Date.now(),
+          content: content,
+          date: new Date().toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+          }),
+          fileName: '原始文件_' + new Date().getTime()
+        };
+
+        history.unshift(record);
+
+        // 限制最大数量
+        if (history.length > MAX_HISTORY) {
+          history = history.slice(0, MAX_HISTORY);
+        }
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        loadHistory();
+      } catch (error) {
+        console.error('保存历史记录失败:', error);
+      }
+    }
+
+    // 加载历史记录
+    function loadHistory() {
+      try {
+        const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        
+        if (history.length === 0) {
+          historyList.innerHTML = '<div class="no-history">暂无保存的文件</div>';
+          return;
+        }
+
+        historyList.innerHTML = '';
+        history.forEach(record => {
+          const div = document.createElement('div');
+          div.className = 'history-item';
+          div.innerHTML = `
+            <div class="history-info">
+              <div class="history-date">${record.date}</div>
+              <div class="history-name">${record.fileName}.plist</div>
+            </div>
+            <button class="btn btn-secondary btn-small" onclick="downloadHistory(${record.id})">
+              下载原文件
+            </button>
+          `;
+          historyList.appendChild(div);
+        });
+      } catch (error) {
+        console.error('加载历史记录失败:', error);
+        historyList.innerHTML = '<div class="no-history">加载失败</div>';
+      }
+    }
+
+    // 下载历史记录
+    window.downloadHistory = function(id) {
+      try {
+        const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const record = history.find(r => r.id === id);
+        
+        if (record) {
+          downloadFile(record.content, record.fileName + '.plist');
+        }
+      } catch (error) {
+        alert('下载失败：' + error.message);
+      }
+    };
+
+    // 清空历史记录（可选功能，暂不添加按钮）
+    window.clearHistory = function() {
+      if (confirm('确定要清空所有历史记录吗？')) {
+        localStorage.removeItem(STORAGE_KEY);
+        loadHistory();
+      }
+    };
+  </script>
+</body>
+</html>
+
