@@ -55,17 +55,16 @@
     .warning-banner-text {
       display: inline-block;
       white-space: nowrap;
-      animation: marquee 25s linear infinite;
+      animation: marquee 30s linear infinite;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-size: 14px;
-      padding-right: 100%;
     }
 
     @keyframes marquee {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     /* 容器 */
@@ -201,6 +200,12 @@
       font-weight: 600;
       margin-top: 8px;
       display: none;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      background: #ffebee;
+      padding: 12px;
+      border: 2px solid var(--error);
+      border-radius: 4px;
     }
 
     .error-message.show {
@@ -556,6 +561,191 @@
       display: block;
     }
 
+    /* 风险警告模态框 */
+    .risk-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .risk-modal-overlay.hidden {
+      display: none;
+    }
+
+    .risk-modal {
+      background: var(--white);
+      max-width: 600px;
+      width: 100%;
+      border: 4px solid var(--black);
+      box-shadow: 12px 12px 0px var(--black);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .risk-modal-header {
+      background: var(--error);
+      color: var(--white);
+      padding: 24px;
+      border-bottom: 4px solid var(--black);
+    }
+
+    .risk-modal-header h2 {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .risk-modal-body {
+      padding: 32px;
+      background: var(--white);
+    }
+
+    .risk-modal-body ul {
+      margin-left: 20px;
+      line-height: 2;
+      color: var(--error);
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .risk-modal-body ul li {
+      margin-bottom: 12px;
+    }
+
+    .risk-modal-body strong {
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    .risk-modal-footer {
+      padding: 24px 32px;
+      border-top: 3px solid var(--light-gray);
+      background: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .risk-modal-timer {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--error);
+      text-transform: uppercase;
+    }
+
+    .risk-modal-btn {
+      padding: 16px 48px;
+      background: var(--black);
+      color: var(--white);
+      border: 3px solid var(--black);
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      box-shadow: 4px 4px 0px var(--error);
+      cursor: not-allowed;
+      opacity: 0.5;
+      transition: all 0.2s ease-out;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .risk-modal-btn.active {
+      cursor: pointer;
+      opacity: 1;
+      background: var(--error);
+    }
+
+    .risk-modal-btn.active:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--black);
+    }
+
+    .risk-modal-btn.active:active {
+      transform: translate(0, 0);
+      box-shadow: 2px 2px 0px var(--black);
+    }
+
+    .risk-note {
+      background: var(--yellow-primary);
+      border: 3px solid var(--black);
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .risk-modal {
+        box-shadow: 8px 8px 0px var(--black);
+      }
+
+      .risk-modal-header {
+        padding: 16px;
+      }
+
+      .risk-modal-header h2 {
+        font-size: 20px;
+      }
+
+      .risk-modal-body {
+        padding: 20px 16px;
+      }
+
+      .risk-modal-body ul {
+        font-size: 14px;
+        line-height: 1.8;
+        margin-left: 16px;
+      }
+
+      .risk-modal-footer {
+        padding: 16px;
+      }
+
+      .risk-modal-btn {
+        padding: 12px 32px;
+        font-size: 16px;
+      }
+
+      .risk-modal-timer {
+        font-size: 16px;
+      }
+
+      .risk-note {
+        font-size: 13px;
+        padding: 12px;
+      }
+    }
+
     /* 使用指南 */
     .usage-guide {
       background: var(--teal);
@@ -601,21 +791,6 @@
     }
 
     /* 历史记录 */
-    .history-section {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 2px solid var(--light-gray);
-    }
-
-    .history-title {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 12px;
-      color: var(--dark-gray);
-    }
-
     .history-item {
       background: var(--off-white);
       border: 2px solid var(--black);
@@ -680,25 +855,70 @@
   </style>
 </head>
 <body>
+  <!-- 风险警告模态框 -->
+  <div class="risk-modal-overlay" id="riskModal">
+    <div class="risk-modal">
+      <div class="risk-modal-header">
+        <h2>⚠️ 重要风险警告</h2>
+      </div>
+      <div class="risk-modal-body">
+        <ul>
+          <li><strong>使用本工具存在风险</strong>，错误的配置可能导致设备出现问题或无法开机</li>
+          <li><strong>在操作前务必备份您的设备</strong>，使用 iTunes 或 iCloud 进行完整备份</li>
+          <li>确保您的设备系统版本支持（<strong>iOS 18.1+</strong>），型号与输入值完全匹配</li>
+          <li>本工具仅修改 <strong>97JDvERpVwO+GHtthIh7hA</strong> 字段为美版型号</li>
+          <li>程序会自动替换地区代码为 <strong>LL</strong> 和 <strong>LL/A</strong>，其他字段保持不变</li>
+          <li><strong>使用 misaka26 时请仔细阅读官方说明文档</strong>，错误操作可能导致严重后果</li>
+          <li>作者不对使用本工具造成的任何问题负责，<strong>您需自行承担所有风险</strong></li>
+        </ul>
+        <div class="risk-note">
+          <strong>📌 技术说明：</strong>导出的文件使用标准 XML 格式，MIME 类型设置为 octet-stream 仅用于避免浏览器自动添加 .xml 后缀，<strong>不会影响 misaka26 读取文件</strong>。程序根据文件内容而非 MIME 类型识别文件。
+        </div>
+      </div>
+      <div class="risk-modal-footer">
+        <div class="risk-modal-timer" id="riskTimer">请仔细阅读警告（3 秒）</div>
+        <button class="risk-modal-btn" id="riskAcceptBtn" disabled>
+          我已了解风险
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- 黄色横幅 -->
   <div class="warning-banner">
     <div class="warning-banner-text">
-      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
-      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
-      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
-      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
-      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
-      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
-      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
-      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
-      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
-      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
-      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
-      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
-      <span style="margin: 0 20px;">MOBILEGESTALT EDITOR</span>
-      <span style="margin: 0 20px;">EDIT PLIST FILES ONLINE</span>
-      <span style="margin: 0 20px;">SIMPLE & SECURE</span>
-      <span style="margin: 0 20px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
+      <span style="margin: 0 30px;">MOBILEGESTALT EDITOR</span>
+      <span style="margin: 0 30px;">EDIT PLIST FILES ONLINE</span>
+      <span style="margin: 0 30px;">SIMPLE & SECURE</span>
+      <span style="margin: 0 30px;">NO SERVER PROCESSING</span>
     </div>
   </div>
 
@@ -709,16 +929,28 @@
       <h1>MobileGestalt<br>Plist Editor</h1>
       <p>在线编辑和修改 MobileGestalt.plist 文件，支持自动替换关键字段</p>
       <div class="info-text">
-        <strong>注意：</strong>您无需手动修改地区代码（如 CH、CH/A 等），程序会自动将其替换为 <strong>LL</strong> 和 <strong>LL/A</strong>。
-        <br>
-        如果不清楚 A 开头的型号应该换成什么，请前往 
-        <a href="https://support.apple.com/zh-cn/108044" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
-          Apple 官方支持
-        </a> 
-        查找您的设备对应的美版号码。
+        <div style="margin-bottom: 12px;">
+          <strong>注意：</strong>您无需手动修改地区代码（如 CH、CH/A 等），程序会自动将其替换为 <strong>LL</strong> 和 <strong>LL/A</strong>。
+        </div>
+        <div style="margin-bottom: 12px;">
+          如果不清楚 A 开头的型号应该换成什么，请前往 
+          <a href="https://support.apple.com/zh-cn/108044" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
+            Apple 官方支持
+          </a> 
+          查找您的设备对应的美版号码。
+        </div>
+        <div style="padding-top: 12px; border-top: 2px solid var(--light-gray);">
+          <strong>下载工具：</strong>修改完成后需要使用 <strong>misaka26 App</strong> 应用配置文件。
+          <a href="https://github.com/straight-tamago/misaka26/releases/" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
+            前往 GitHub 下载最新版
+          </a>
+        </div>
       </div>
     </div>
 
@@ -734,14 +966,8 @@
         <li>点击 <strong>Apply</strong> 按钮完成</li>
       </ol>
       <div style="margin-top: 20px; padding: 16px; background: rgba(0,0,0,0.1); border: 2px solid rgba(255,255,255,0.3);">
-        <strong>⚠️ 注意：</strong>如果您的电脑没有下载 misaka26 App，可以前往 
-        <a href="https://github.com/straight-tamago/misaka26/releases/" 
-           target="_blank" 
-           rel="noopener noreferrer"
-           style="color: #FFD60A; text-decoration: underline; font-weight: 700;">
-          GitHub Releases
-        </a> 
-        下载最新版的软件
+        <strong>📝 提示：</strong>如果下载的文件名被改为 <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;">com.apple.MobileGestalt.plist.xml</code>，
+        请手动将文件重命名为 <code style="background: #FFD60A; color: #000; padding: 2px 6px; border-radius: 3px; font-weight: 700;">com.apple.MobileGestalt.plist</code>（删除末尾的 .xml）
       </div>
     </div>
 
@@ -825,13 +1051,17 @@
           导出并下载
         </button>
       </div>
+    </div>
 
-      <!-- 历史记录 -->
-      <div class="history-section" id="historySection">
-        <div class="history-title">原始文件历史记录</div>
-        <div id="historyList">
-          <div class="no-history">暂无保存的文件</div>
-        </div>
+    <!-- 历史记录卡片 -->
+    <div class="card" id="historyCard">
+      <div class="card-header">
+        <span class="badge" style="background: var(--coral);">历史记录</span>
+        <h2 class="card-title">原始文件历史记录</h2>
+      </div>
+
+      <div id="historyList">
+        <div class="no-history">暂无保存的文件</div>
       </div>
     </div>
   </div>
@@ -868,9 +1098,15 @@
     const loading = document.getElementById('loading');
     const usageGuide = document.getElementById('usageGuide');
     const historyList = document.getElementById('historyList');
+    
+    // 风险警告模态框元素
+    const riskModal = document.getElementById('riskModal');
+    const riskTimer = document.getElementById('riskTimer');
+    const riskAcceptBtn = document.getElementById('riskAcceptBtn');
 
     // 初始化
     loadHistory();
+    showRiskWarning();
 
     // 文件上传处理
     fileInput.addEventListener('change', (e) => {
@@ -927,17 +1163,29 @@
           // 检查是否有解析错误
           const parserError = plistDoc.querySelector('parsererror');
           if (parserError) {
-            throw new Error('XML 解析失败');
+            throw new Error('XML 格式错误，请确保粘贴的是完整的 plist 文件内容（包含 <?xml 开头标签）');
+          }
+
+          // 检查是否是 plist 文件
+          const plist = plistDoc.querySelector('plist');
+          if (!plist) {
+            throw new Error('这不是有效的 plist 文件，请确保粘贴的是 com.apple.MobileGestalt.plist 文件内容');
           }
 
           // 查找 CacheExtra 字典
           const cacheExtra = findCacheExtra(plistDoc);
           if (!cacheExtra) {
-            throw new Error('未找到 CacheExtra 字典');
+            throw new Error('文件格式不正确：未找到 CacheExtra 字典，请确认这是从设备导出的 MobileGestalt.plist 文件');
           }
 
           // 解析 plist 数据
           plistData = parsePlistDict(cacheExtra);
+
+          // 验证是否包含必要字段
+          const requiredKey = '97JDvERpVwO+GHtthIh7hA';
+          if (!plistData[requiredKey]) {
+            throw new Error('文件缺少必要的字段（97JDvERpVwO+GHtthIh7hA），这可能不是正确的 MobileGestalt 文件');
+          }
 
           // 显示查看器
           displayPlist(plistData);
@@ -948,7 +1196,16 @@
           viewerCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         } catch (error) {
-          showError(inputError, plistInput, '解析失败：' + error.message);
+          let errorMsg = '解析失败：' + error.message;
+          
+          // 添加帮助提示
+          if (error.message.includes('XML')) {
+            errorMsg += '\n\n💡 提示：请确保复制了完整的文件内容，包括第一行的 <?xml version="1.0" encoding="UTF-8"?>';
+          } else if (error.message.includes('CacheExtra')) {
+            errorMsg += '\n\n💡 提示：请确认这是从 iPhone 设置中导出的 com.apple.MobileGestalt.plist 文件';
+          }
+          
+          showError(inputError, plistInput, errorMsg);
           viewerCard.classList.add('hidden');
           editCard.classList.add('hidden');
         } finally {
@@ -1133,6 +1390,7 @@
     }
 
     // 修改 plist 值
+    // 仅修改三个安全字段，不影响其他系统配置
     function modifyPlistValues(doc, newModelValue) {
       const cacheExtra = findCacheExtra(doc);
       if (!cacheExtra) {
@@ -1140,43 +1398,61 @@
       }
 
       const keys = Array.from(cacheExtra.querySelectorAll('key'));
+      let modifiedCount = 0;
       
-      // 修改 97JDvERpVwO+GHtthIh7hA
+      // 修改 97JDvERpVwO+GHtthIh7hA - 设备型号标识符
       for (let keyElement of keys) {
         if (keyElement.textContent === '97JDvERpVwO+GHtthIh7hA') {
           const valueElement = keyElement.nextElementSibling;
           if (valueElement && valueElement.tagName === 'string') {
             valueElement.textContent = newModelValue;
+            modifiedCount++;
           }
         }
-        // 修改 zHeENZu+wbg7PUprwNwBWg 为 LL/A
+        // 修改 zHeENZu+wbg7PUprwNwBWg 为 LL/A - 地区代码（完整）
         else if (keyElement.textContent === 'zHeENZu+wbg7PUprwNwBWg') {
           const valueElement = keyElement.nextElementSibling;
           if (valueElement && valueElement.tagName === 'string') {
             valueElement.textContent = 'LL/A';
+            modifiedCount++;
           }
         }
-        // 修改 h63QSdBCiT/z0WU6rdQv6Q 为 LL
+        // 修改 h63QSdBCiT/z0WU6rdQv6Q 为 LL - 地区代码（简写）
         else if (keyElement.textContent === 'h63QSdBCiT/z0WU6rdQv6Q') {
           const valueElement = keyElement.nextElementSibling;
           if (valueElement && valueElement.tagName === 'string') {
             valueElement.textContent = 'LL';
+            modifiedCount++;
           }
         }
+      }
+
+      // 验证是否成功修改了所有必要字段
+      if (modifiedCount < 3) {
+        console.warn('警告：部分字段未找到或未修改，已修改 ' + modifiedCount + ' 个字段');
       }
     }
 
     // 下载文件
     function downloadFile(content, filename) {
-      const blob = new Blob([content], { type: 'application/xml' });
+      // 使用 octet-stream 强制浏览器按原样下载，避免自动添加 .xml 后缀
+      const blob = new Blob([content], { type: 'application/octet-stream' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
+      
+      // 强制设置文件名，确保不被修改
+      a.setAttribute('download', filename);
+      
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      
+      // 延迟清理，确保下载完成
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
     }
 
     // 显示错误
@@ -1271,6 +1547,43 @@
         loadHistory();
       }
     };
+
+    // 显示风险警告模态框（每次打开/刷新页面都显示）
+    function showRiskWarning() {
+      let countdown = 3;
+      riskModal.classList.remove('hidden');
+      riskAcceptBtn.disabled = true;
+      riskAcceptBtn.classList.remove('active');
+      
+      // 更新倒计时显示
+      function updateTimer() {
+        if (countdown > 0) {
+          riskTimer.textContent = `请仔细阅读警告（${countdown} 秒）`;
+          countdown--;
+          setTimeout(updateTimer, 1000);
+        } else {
+          riskTimer.textContent = '您可以关闭此警告了';
+          riskAcceptBtn.disabled = false;
+          riskAcceptBtn.classList.add('active');
+        }
+      }
+      
+      updateTimer();
+      
+      // 关闭按钮事件
+      riskAcceptBtn.addEventListener('click', () => {
+        if (!riskAcceptBtn.disabled) {
+          riskModal.classList.add('hidden');
+        }
+      });
+      
+      // 防止点击模态框背景关闭
+      riskModal.addEventListener('click', (e) => {
+        if (e.target === riskModal && !riskAcceptBtn.disabled) {
+          riskModal.classList.add('hidden');
+        }
+      });
+    }
   </script>
 </body>
 </html>
