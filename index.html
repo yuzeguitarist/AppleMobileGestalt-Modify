@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MobileGestalt Plist Editor</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <style>
     /* 基础样式 */
     * {
@@ -63,8 +66,13 @@
     }
 
     @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
     }
 
     /* 容器 */
@@ -112,6 +120,32 @@
     .header .info-text strong {
       color: var(--coral);
       font-weight: 700;
+    }
+
+    .download-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .download-links a {
+      color: var(--blue-primary);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .download-links a.mirror {
+      color: var(--success);
+    }
+
+    @media (max-width: 768px) {
+      .download-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
     }
 
     /* 卡片 */
@@ -458,6 +492,164 @@
       display: none !important;
     }
 
+    /* 人机验证模态框 */
+    .verify-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+      padding: 16px;
+    }
+
+    .verify-modal {
+      background: var(--white);
+      max-width: 500px;
+      width: 100%;
+      border: 4px solid var(--black);
+      box-shadow: 8px 8px 0px var(--black);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    .verify-modal-header {
+      background: var(--blue-primary);
+      color: var(--white);
+      padding: 20px;
+      border-bottom: 4px solid var(--black);
+    }
+
+    .verify-modal-header h3 {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .verify-modal-body {
+      padding: 32px;
+    }
+
+    .verify-question {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+      color: var(--black);
+      font-family: var(--font-heading);
+      background: var(--yellow-primary);
+      padding: 20px;
+      border: 3px solid var(--black);
+    }
+
+    .verify-input {
+      width: 100%;
+      padding: 16px;
+      font-size: 24px;
+      text-align: center;
+      border: 3px solid var(--black);
+      font-weight: 700;
+      font-family: var(--font-heading);
+      margin-bottom: 24px;
+    }
+
+    .verify-input:focus {
+      outline: none;
+      box-shadow: 4px 4px 0px var(--black);
+    }
+
+    .verify-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .verify-btn {
+      flex: 1;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 3px solid var(--black);
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+    }
+
+    .verify-btn-submit {
+      background: var(--success);
+      color: var(--white);
+      box-shadow: 4px 4px 0px var(--black);
+    }
+
+    .verify-btn-submit:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px var(--black);
+    }
+
+    .verify-btn-cancel {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    .verify-btn-cancel:hover {
+      background: var(--light-gray);
+    }
+
+    .verify-error {
+      color: var(--error);
+      font-weight: 600;
+      margin-top: 12px;
+      text-align: center;
+      display: none;
+    }
+
+    .verify-info {
+      background: var(--off-white);
+      padding: 16px;
+      border: 2px solid var(--black);
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .download-limit-warning {
+      background: #fff3cd;
+      border: 3px solid #ffc107;
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark-gray);
+    }
+
+    @media (max-width: 768px) {
+      .verify-modal {
+        box-shadow: 6px 6px 0px var(--black);
+      }
+
+      .verify-modal-header h3 {
+        font-size: 20px;
+      }
+
+      .verify-question {
+        font-size: 24px;
+        padding: 16px;
+      }
+
+      .verify-input {
+        font-size: 20px;
+        padding: 12px;
+      }
+
+      .verify-buttons {
+        flex-direction: column;
+      }
+    }
+
     /* 页脚 */
     .footer {
       background: var(--black);
@@ -596,6 +788,7 @@
         opacity: 0;
         transform: translateY(-50px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -854,12 +1047,13 @@
     }
   </style>
 </head>
+
 <body>
   <!-- 风险警告模态框 -->
   <div class="risk-modal-overlay" id="riskModal">
     <div class="risk-modal">
       <div class="risk-modal-header">
-        <h2>⚠️ 重要风险警告</h2>
+        <h2>重要风险警告</h2>
       </div>
       <div class="risk-modal-body">
         <ul>
@@ -872,7 +1066,8 @@
           <li>作者不对使用本工具造成的任何问题负责，<strong>您需自行承担所有风险</strong></li>
         </ul>
         <div class="risk-note">
-          <strong>📌 技术说明：</strong>导出的文件使用标准 XML 格式，MIME 类型设置为 octet-stream 仅用于避免浏览器自动添加 .xml 后缀，<strong>不会影响 misaka26 读取文件</strong>。程序根据文件内容而非 MIME 类型识别文件。
+          <strong>技术说明：</strong>导出的文件使用标准 XML 格式，MIME 类型设置为 octet-stream 仅用于避免浏览器自动添加 .xml 后缀，<strong>不会影响 misaka26
+            读取文件</strong>。程序根据文件内容而非 MIME 类型识别文件。
         </div>
       </div>
       <div class="risk-modal-footer">
@@ -933,23 +1128,42 @@
           <strong>注意：</strong>您无需手动修改地区代码（如 CH、CH/A 等），程序会自动将其替换为 <strong>LL</strong> 和 <strong>LL/A</strong>。
         </div>
         <div style="margin-bottom: 12px;">
-          如果不清楚 A 开头的型号应该换成什么，请前往 
-          <a href="https://support.apple.com/zh-cn/108044" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
+          如果不清楚 A 开头的型号应该换成什么，请前往
+          <a href="https://support.apple.com/zh-cn/108044" target="_blank" rel="noopener noreferrer"
+            style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
             Apple 官方支持
-          </a> 
+          </a>
           查找您的设备对应的美版号码。
         </div>
         <div style="padding-top: 12px; border-top: 2px solid var(--light-gray);">
           <strong>下载工具：</strong>修改完成后需要使用 <strong>misaka26 App</strong> 应用配置文件。
-          <a href="https://github.com/straight-tamago/misaka26/releases/" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             style="color: var(--blue-primary); text-decoration: underline; font-weight: 600;">
-            前往 GitHub 下载最新版
-          </a>
+          <div class="download-links">
+            <span>官方下载：</span>
+            <a href="https://github.com/straight-tamago/misaka26/releases/" target="_blank" rel="noopener noreferrer">
+              GitHub Releases
+            </a>
+          </div>
+          <div class="download-links" id="cfDownloadLink" style="display: none;">
+            <span>国内高速：</span>
+            <a href="#" id="cfDownloadUrl" onclick="startDownloadVerification(event)"
+              style="color: var(--success); text-decoration: underline; font-weight: 700;">
+              Cloudflare CDN 下载
+            </a>
+          </div>
+          <div class="download-links" id="shortcutDownloadLink" style="display: flex;">
+            <span>快捷指令：</span>
+            <a href="#" onclick="startShortcutDownloadVerification(event)"
+              style="color: var(--teal); text-decoration: underline; font-weight: 700;">
+              iPhone 提取 Plist 快捷指令
+            </a>
+            <span style="font-size: 12px; color: var(--medium-gray);">（用于在 iPhone 上直接导出 MobileGestalt.plist 文件）</span>
+          </div>
+          <div class="download-limit-warning" id="downloadLimitWarning" style="display: none;">
+            您今天已达到下载次数限制（2次/IP）。请明天再试或联系管理员。
+          </div>
+          <div class="download-limit-warning" id="shortcutDownloadLimitWarning" style="display: none;">
+            您今天的快捷指令下载次数已用完（2次/IP）。请明天再试。
+          </div>
         </div>
       </div>
     </div>
@@ -965,9 +1179,13 @@
         <li>勾选 <strong>"Apple Intelligence (18.1 Beta, All Devices)"</strong></li>
         <li>点击 <strong>Apply</strong> 按钮完成</li>
       </ol>
-      <div style="margin-top: 20px; padding: 16px; background: rgba(0,0,0,0.1); border: 2px solid rgba(255,255,255,0.3);">
-        <strong>📝 提示：</strong>如果下载的文件名被改为 <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;">com.apple.MobileGestalt.plist.xml</code>，
-        请手动将文件重命名为 <code style="background: #FFD60A; color: #000; padding: 2px 6px; border-radius: 3px; font-weight: 700;">com.apple.MobileGestalt.plist</code>（删除末尾的 .xml）
+      <div
+        style="margin-top: 20px; padding: 16px; background: rgba(0,0,0,0.1); border: 2px solid rgba(255,255,255,0.3);">
+        <strong>提示：</strong>如果下载的文件名被改为 <code
+          style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 3px;">com.apple.MobileGestalt.plist.xml</code>，
+        请手动将文件重命名为 <code
+          style="background: #FFD60A; color: #000; padding: 2px 6px; border-radius: 3px; font-weight: 700;">com.apple.MobileGestalt.plist</code>（删除末尾的
+        .xml）
       </div>
     </div>
 
@@ -990,11 +1208,7 @@
         <label class="input-label" for="plistInput">
           粘贴 Plist XML 内容：
         </label>
-        <textarea 
-          id="plistInput" 
-          class="input-field" 
-          placeholder="粘贴 com.apple.MobileGestalt.plist 文件内容..."
-        ></textarea>
+        <textarea id="plistInput" class="input-field" placeholder="粘贴 com.apple.MobileGestalt.plist 文件内容..."></textarea>
         <div class="error-message" id="inputError">请输入有效的 plist XML 内容</div>
       </div>
 
@@ -1036,13 +1250,7 @@
         <label class="input-label" for="newValue">
           97JDvERpVwO+GHtthIh7hA 的新值（如：A3258）：
         </label>
-        <input 
-          type="text" 
-          id="newValue" 
-          class="input-field small" 
-          placeholder="A3258"
-          maxlength="10"
-        >
+        <input type="text" id="newValue" class="input-field small" placeholder="A3258" maxlength="10">
         <div class="error-message" id="valueError">请输入有效的值（不允许空格和特殊字符）</div>
       </div>
 
@@ -1066,6 +1274,34 @@
     </div>
   </div>
 
+  <!-- 人机验证模态框 -->
+  <div class="verify-modal-overlay hidden" id="verifyModal">
+    <div class="verify-modal">
+      <div class="verify-modal-header">
+        <h3>人机验证</h3>
+      </div>
+      <div class="verify-modal-body">
+        <div class="verify-info">
+          <strong>下载限制：</strong>每个 IP 地址每天最多下载 2 次。<br>
+          请完成以下验证以继续下载。
+        </div>
+        <div class="verify-question" id="verifyQuestion">
+          加载中...
+        </div>
+        <input type="number" class="verify-input" id="verifyInput" placeholder="请输入答案" autocomplete="off">
+        <div class="verify-error" id="verifyError">答案错误，请重试</div>
+        <div class="verify-buttons">
+          <button class="verify-btn verify-btn-cancel" onclick="closeVerifyModal()">
+            取消
+          </button>
+          <button class="verify-btn verify-btn-submit" onclick="submitVerification()">
+            提交验证
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- 页脚 -->
   <footer class="footer">
     <div class="footer-content">
@@ -1081,6 +1317,14 @@
     let originalPlistContent = '';
     const STORAGE_KEY = 'mobilegestalt_history';
     const MAX_HISTORY = 10;
+    const DOWNLOAD_LIMIT_KEY = 'download_limit';
+    const SHORTCUT_DOWNLOAD_LIMIT_KEY = 'shortcut_download_limit'; // 快捷指令下载限制
+    const MAX_DOWNLOADS = 2; // 每个IP最多下载2次
+
+    // 验证相关变量
+    let verifyAnswer = 0;
+    let downloadUrl = '';
+    let downloadType = ''; // 'misaka' 或 'shortcut'
 
     // DOM 元素
     const fileInput = document.getElementById('fileInput');
@@ -1098,7 +1342,7 @@
     const loading = document.getElementById('loading');
     const usageGuide = document.getElementById('usageGuide');
     const historyList = document.getElementById('historyList');
-    
+
     // 风险警告模态框元素
     const riskModal = document.getElementById('riskModal');
     const riskTimer = document.getElementById('riskTimer');
@@ -1107,6 +1351,8 @@
     // 初始化
     loadHistory();
     showRiskWarning();
+    initCloudflareDownload();
+    checkShortcutDownloadLimit(); // 检查快捷指令下载限制
 
     // 文件上传处理
     fileInput.addEventListener('change', (e) => {
@@ -1140,7 +1386,7 @@
     // 解析按钮
     parseBtn.addEventListener('click', () => {
       const xmlContent = plistInput.value.trim();
-      
+
       if (!xmlContent) {
         showError(inputError, plistInput, '请输入有效的 plist XML 内容');
         return;
@@ -1197,14 +1443,14 @@
 
         } catch (error) {
           let errorMsg = '解析失败：' + error.message;
-          
+
           // 添加帮助提示
           if (error.message.includes('XML')) {
-            errorMsg += '\n\n💡 提示：请确保复制了完整的文件内容，包括第一行的 <?xml version="1.0" encoding="UTF-8"?>';
+            errorMsg += '\n\n提示：请确保复制了完整的文件内容，包括第一行的 <?xml version="1.0" encoding="UTF-8"?>';
           } else if (error.message.includes('CacheExtra')) {
-            errorMsg += '\n\n💡 提示：请确认这是从 iPhone 设置中导出的 com.apple.MobileGestalt.plist 文件';
+            errorMsg += '\n\n提示：请确认这是从 iPhone 设置中导出的 com.apple.MobileGestalt.plist 文件';
           }
-          
+
           showError(inputError, plistInput, errorMsg);
           viewerCard.classList.add('hidden');
           editCard.classList.add('hidden');
@@ -1225,7 +1471,7 @@
     // 导出按钮
     exportBtn.addEventListener('click', () => {
       const value = newValue.value.trim();
-      
+
       if (!value || !/^[A-Za-z0-9]+$/.test(value)) {
         showError(valueError, newValue, '请输入有效的值（不允许空格和特殊字符）');
         return;
@@ -1257,7 +1503,7 @@
 
         // 显示使用指南
         usageGuide.classList.add('show');
-        
+
         // 滚动到使用指南
         setTimeout(() => {
           usageGuide.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1289,25 +1535,25 @@
     function parsePlistDict(dictElement) {
       const result = {};
       const children = Array.from(dictElement.children);
-      
+
       for (let i = 0; i < children.length; i += 2) {
         const keyElement = children[i];
         const valueElement = children[i + 1];
-        
+
         if (keyElement && keyElement.tagName === 'key' && valueElement) {
           const key = keyElement.textContent;
           const value = parsePlistValue(valueElement);
           result[key] = value;
         }
       }
-      
+
       return result;
     }
 
     // 解析 plist 值
     function parsePlistValue(element) {
       const tag = element.tagName.toLowerCase();
-      
+
       switch (tag) {
         case 'string':
           return { type: 'string', value: element.textContent };
@@ -1343,7 +1589,7 @@
     function displayPlist(data) {
       const ul = document.createElement('ul');
       ul.className = 'plist-tree';
-      
+
       // 显示关键字段
       const highlightKeys = [
         '97JDvERpVwO+GHtthIh7hA',
@@ -1399,7 +1645,7 @@
 
       const keys = Array.from(cacheExtra.querySelectorAll('key'));
       let modifiedCount = 0;
-      
+
       // 修改 97JDvERpVwO+GHtthIh7hA - 设备型号标识符
       for (let keyElement of keys) {
         if (keyElement.textContent === '97JDvERpVwO+GHtthIh7hA') {
@@ -1441,13 +1687,13 @@
       const a = document.createElement('a');
       a.href = url;
       a.download = filename;
-      
+
       // 强制设置文件名，确保不被修改
       a.setAttribute('download', filename);
-      
+
       document.body.appendChild(a);
       a.click();
-      
+
       // 延迟清理，确保下载完成
       setTimeout(() => {
         document.body.removeChild(a);
@@ -1466,7 +1712,7 @@
     function saveToHistory(content) {
       try {
         let history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        
+
         // 添加新记录
         const record = {
           id: Date.now(),
@@ -1499,7 +1745,7 @@
     function loadHistory() {
       try {
         const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        
+
         if (history.length === 0) {
           historyList.innerHTML = '<div class="no-history">暂无保存的文件</div>';
           return;
@@ -1527,11 +1773,11 @@
     }
 
     // 下载历史记录
-    window.downloadHistory = function(id) {
+    window.downloadHistory = function (id) {
       try {
         const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         const record = history.find(r => r.id === id);
-        
+
         if (record) {
           downloadFile(record.content, record.fileName + '.plist');
         }
@@ -1541,10 +1787,287 @@
     };
 
     // 清空历史记录（可选功能，暂不添加按钮）
-    window.clearHistory = function() {
+    window.clearHistory = function () {
       if (confirm('确定要清空所有历史记录吗？')) {
         localStorage.removeItem(STORAGE_KEY);
         loadHistory();
+      }
+    };
+
+    // 初始化 Cloudflare 下载链接
+    function initCloudflareDownload() {
+      // 使用自定义域名：downloadsmisaka26.windsurfai.top
+      // 请确保在 Cloudflare R2 中已绑定此域名
+      // 并上传 misaka26 文件
+
+      const cfDownloadUrl = 'https://downloadsmisaka26.windsurfai.top/misaka26-v1.5.zip';
+
+      if (cfDownloadUrl && cfDownloadUrl.includes('http')) {
+        const linkElement = document.getElementById('cfDownloadLink');
+        downloadUrl = cfDownloadUrl; // 保存到全局变量
+
+        if (linkElement) {
+          linkElement.style.display = 'flex';
+          checkDownloadLimit(); // 检查下载限制
+        }
+      }
+    }
+
+    // 检查下载限制
+    function checkDownloadLimit() {
+      const limitData = getDownloadLimit();
+      const today = new Date().toDateString();
+
+      if (limitData.date === today && limitData.count >= MAX_DOWNLOADS) {
+        // 已达到下载限制
+        document.getElementById('cfDownloadLink').style.display = 'none';
+        document.getElementById('downloadLimitWarning').style.display = 'block';
+      }
+    }
+
+    // 获取下载限制数据
+    function getDownloadLimit() {
+      try {
+        const data = localStorage.getItem(DOWNLOAD_LIMIT_KEY);
+        if (data) {
+          return JSON.parse(data);
+        }
+      } catch (e) {
+        console.error('读取下载限制失败', e);
+      }
+
+      return { date: '', count: 0 };
+    }
+
+    // 获取快捷指令下载限制数据
+    function getShortcutDownloadLimit() {
+      try {
+        const data = localStorage.getItem(SHORTCUT_DOWNLOAD_LIMIT_KEY);
+        if (data) {
+          return JSON.parse(data);
+        }
+      } catch (e) {
+        console.error('读取快捷指令下载限制失败', e);
+      }
+
+      return { date: '', count: 0 };
+    }
+
+    // 更新下载次数
+    function updateDownloadCount() {
+      const today = new Date().toDateString();
+      let limitData = getDownloadLimit();
+
+      if (limitData.date === today) {
+        limitData.count += 1;
+      } else {
+        // 新的一天，重置计数
+        limitData = { date: today, count: 1 };
+      }
+
+      localStorage.setItem(DOWNLOAD_LIMIT_KEY, JSON.stringify(limitData));
+
+      // 检查是否达到限制
+      if (limitData.count >= MAX_DOWNLOADS) {
+        document.getElementById('cfDownloadLink').style.display = 'none';
+        document.getElementById('downloadLimitWarning').style.display = 'block';
+      }
+    }
+
+    // 更新快捷指令下载次数
+    function updateShortcutDownloadCount() {
+      const today = new Date().toDateString();
+      let limitData = getShortcutDownloadLimit();
+
+      if (limitData.date === today) {
+        limitData.count += 1;
+      } else {
+        // 新的一天，重置计数
+        limitData = { date: today, count: 1 };
+      }
+
+      localStorage.setItem(SHORTCUT_DOWNLOAD_LIMIT_KEY, JSON.stringify(limitData));
+
+      // 检查是否达到限制
+      if (limitData.count >= MAX_DOWNLOADS) {
+        document.getElementById('shortcutDownloadLink').style.display = 'none';
+        document.getElementById('shortcutDownloadLimitWarning').style.display = 'block';
+      }
+    }
+
+    // 检查快捷指令下载限制
+    function checkShortcutDownloadLimit() {
+      const limitData = getShortcutDownloadLimit();
+      const today = new Date().toDateString();
+
+      if (limitData.date === today && limitData.count >= MAX_DOWNLOADS) {
+        // 已达到下载限制
+        document.getElementById('shortcutDownloadLink').style.display = 'none';
+        document.getElementById('shortcutDownloadLimitWarning').style.display = 'block';
+      }
+    }
+
+    // 开始 misaka26 下载验证流程
+    window.startDownloadVerification = function (event) {
+      event.preventDefault();
+
+      // 再次检查下载限制
+      const limitData = getDownloadLimit();
+      const today = new Date().toDateString();
+
+      if (limitData.date === today && limitData.count >= MAX_DOWNLOADS) {
+        alert('您今天的下载次数已用完（2次/天）。请明天再试。');
+        return;
+      }
+
+      // 设置下载类型和 URL
+      downloadType = 'misaka';
+      downloadUrl = 'https://downloadsmisaka26.windsurfai.top/misaka26-macos.zip';
+
+      // 显示人机验证
+      showVerifyModal();
+    };
+
+    // 开始快捷指令下载验证流程
+    window.startShortcutDownloadVerification = function (event) {
+      event.preventDefault();
+
+      // 检查快捷指令下载限制
+      const limitData = getShortcutDownloadLimit();
+      const today = new Date().toDateString();
+
+      if (limitData.date === today && limitData.count >= MAX_DOWNLOADS) {
+        alert('您今天的快捷指令下载次数已用完（2次/天）。请明天再试。');
+        return;
+      }
+
+      // 设置下载类型和 URL
+      downloadType = 'shortcut';
+      downloadUrl = 'https://downloadsmisaka26.windsurfai.top/Save%20MobileGestalt.shortcut';
+
+      // 显示人机验证
+      showVerifyModal();
+    };
+
+    // 显示验证模态框
+    function showVerifyModal() {
+      const modal = document.getElementById('verifyModal');
+      const input = document.getElementById('verifyInput');
+      const error = document.getElementById('verifyError');
+
+      // 生成随机数学题
+      generateMathQuestion();
+
+      // 重置输入
+      input.value = '';
+      error.style.display = 'none';
+
+      // 显示模态框
+      modal.classList.remove('hidden');
+      input.focus();
+
+      // 按 Enter 提交
+      input.onkeypress = function (e) {
+        if (e.key === 'Enter') {
+          submitVerification();
+        }
+      };
+    }
+
+    // 生成数学题（简化版本）
+    function generateMathQuestion() {
+      // 使用更小的数字范围，使题目更简单
+      const num1 = Math.floor(Math.random() * 10) + 1;  // 1-10
+      const num2 = Math.floor(Math.random() * 10) + 1;  // 1-10
+      const operators = ['+', '-'];  // 只使用加法和减法，移除乘法
+      const operator = operators[Math.floor(Math.random() * operators.length)];
+
+      let question = '';
+
+      switch (operator) {
+        case '+':
+          verifyAnswer = num1 + num2;
+          question = `${num1} + ${num2} = ?`;
+          break;
+        case '-':
+          // 确保结果为正数
+          if (num1 < num2) {
+            verifyAnswer = num2 - num1;
+            question = `${num2} - ${num1} = ?`;
+          } else {
+            verifyAnswer = num1 - num2;
+            question = `${num1} - ${num2} = ?`;
+          }
+          break;
+      }
+
+      document.getElementById('verifyQuestion').textContent = question;
+    }
+
+    // 关闭验证模态框
+    window.closeVerifyModal = function () {
+      document.getElementById('verifyModal').classList.add('hidden');
+    };
+
+    // 直接下载快捷指令文件
+    function downloadShortcutFile(url) {
+      try {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Save MobileGestalt.shortcut';
+        document.body.appendChild(a);
+        a.click();
+
+        // 清理
+        setTimeout(() => {
+          document.body.removeChild(a);
+        }, 100);
+
+        return true;
+      } catch (error) {
+        console.error('下载失败:', error);
+        alert('下载失败：' + error.message + '\n请检查网络连接或稍后重试。');
+        return false;
+      }
+    }
+
+    // 提交验证
+    window.submitVerification = function () {
+      const input = document.getElementById('verifyInput');
+      const error = document.getElementById('verifyError');
+      const userAnswer = parseInt(input.value);
+
+      if (userAnswer === verifyAnswer) {
+        // 验证成功
+        closeVerifyModal();
+
+        // 根据下载类型执行不同的逻辑
+        if (downloadType === 'misaka') {
+          // misaka26 下载
+          updateDownloadCount();
+          window.location.href = downloadUrl;
+
+        } else if (downloadType === 'shortcut') {
+          // 快捷指令下载
+          const success = downloadShortcutFile(downloadUrl);
+
+          if (success) {
+            // 下载成功后更新次数
+            updateShortcutDownloadCount();
+          }
+        }
+
+      } else {
+        // 验证失败
+        error.style.display = 'block';
+        input.value = '';
+        input.focus();
+
+        // 生成新题目
+        setTimeout(() => {
+          generateMathQuestion();
+          error.style.display = 'none';
+        }, 2000);
       }
     };
 
@@ -1554,7 +2077,7 @@
       riskModal.classList.remove('hidden');
       riskAcceptBtn.disabled = true;
       riskAcceptBtn.classList.remove('active');
-      
+
       // 更新倒计时显示
       function updateTimer() {
         if (countdown > 0) {
@@ -1567,16 +2090,16 @@
           riskAcceptBtn.classList.add('active');
         }
       }
-      
+
       updateTimer();
-      
+
       // 关闭按钮事件
       riskAcceptBtn.addEventListener('click', () => {
         if (!riskAcceptBtn.disabled) {
           riskModal.classList.add('hidden');
         }
       });
-      
+
       // 防止点击模态框背景关闭
       riskModal.addEventListener('click', (e) => {
         if (e.target === riskModal && !riskAcceptBtn.disabled) {
@@ -1586,5 +2109,5 @@
     }
   </script>
 </body>
-</html>
 
+</html>
